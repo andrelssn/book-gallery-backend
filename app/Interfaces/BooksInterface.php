@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface RepartitionsInterface
+interface BooksInterface
 {
     public function getWhere($id);
 }

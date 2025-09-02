@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\Api\Objectives\ObjectivesService;
+use App\Http\Resources\AuthorsCollection;
+use App\Models\Authors;
+use App\Services\Api\Authors\AuthorsService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
-class ObjectivesController extends Controller
+class AuthorsController extends Controller
 {
 
-    private $objectivesService;
+    private $authorsService;
 
-    public function __construct(ObjectivesService $objectivesService)
+    public function __construct(AuthorsService $authorsService)
     {
-        $this->objectivesService = $objectivesService;
+        $this->authorsService = $authorsService;
     }
 
     /**
@@ -22,7 +24,7 @@ class ObjectivesController extends Controller
      */
     public function index(Request $request)
     {
-        $requisition = $this->objectivesService->getObjectives($request);
+        $requisition = Authors::get();
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -32,8 +34,8 @@ class ObjectivesController extends Controller
 
         return response()->json([
             'status'    => true,
-            'message'   => "Objectives list.",
-            'data'      => $requisition
+            'message'   => "Autor list.",
+            'data'      => new AuthorsCollection($requisition)
         ], 200);
     }
 
@@ -42,7 +44,7 @@ class ObjectivesController extends Controller
      */
     public function store(Request $request)
     {
-        $requisition = $this->objectivesService->storeObjective($request);
+        $requisition = $this->authorsService->storeAuthor($request);
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -52,15 +54,28 @@ class ObjectivesController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Objective created.",
+            'message' => "Author added.",
         ], 200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(Request $request, int $id)
     {
+        $requisition = Authors::where('id', $id)->first();
+
+        if (!$requisition) {
+            throw new HttpResponseException(response()->json([
+                'error' => "An error has ocurred during the requisition."
+            ], 422));
+        }
+
+        return response()->json([
+            'status'    => true,
+            'message'   => "Autor data.",
+            'data'      => $requisition
+        ], 200);
     }
 
     /**
@@ -68,7 +83,7 @@ class ObjectivesController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $requisition = $this->objectivesService->updateObjective($request, $id);
+        $requisition = $this->authorsService->updateAuthor($request, $id);
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -78,7 +93,7 @@ class ObjectivesController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Objective info updated.",
+            'message' => "Author info updated.",
         ], 200);
     }
 
@@ -87,7 +102,7 @@ class ObjectivesController extends Controller
      */
     public function destroy(int $id)
     {
-        $requisition = $this->objectivesService->deleteObjective($id);
+        $requisition = $this->authorsService->deleteAuthor($id);
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -97,7 +112,7 @@ class ObjectivesController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Objective deleted.",
+            'message' => "Book deleted.",
         ], 200);
     }
 }

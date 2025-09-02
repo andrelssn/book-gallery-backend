@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface MonthlyExpensesInterface
+interface AuthorsInterface
 {
     public function getWhere($id);
 }

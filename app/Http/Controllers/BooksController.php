@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\Api\MonthlyExpenses\MonthlyExpensesService;
+use App\Http\Resources\BooksCollection;
+use App\Models\Books;
+use App\Services\Api\Books\BooksService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
-class MonthlyExpensesController extends Controller
+class BooksController extends Controller
 {
 
-    private $monthlyExpensesService;
+    private $booksService;
 
-    public function __construct(MonthlyExpensesService $monthlyExpensesService)
+    public function __construct(BooksService $booksService)
     {
-        $this->monthlyExpensesService = $monthlyExpensesService;
+        $this->booksService = $booksService;
     }
 
     /**
@@ -22,7 +24,7 @@ class MonthlyExpensesController extends Controller
      */
     public function index(Request $request)
     {
-        $requisition = $this->monthlyExpensesService->getExpenses($request);
+        $requisition = Books::get();
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -32,8 +34,8 @@ class MonthlyExpensesController extends Controller
 
         return response()->json([
             'status'    => true,
-            'message'   => "Monthly expense list.",
-            'data'      => $requisition
+            'message'   => "Book list.",
+            'data'      => new BooksCollection($requisition)
         ], 200);
     }
 
@@ -42,7 +44,7 @@ class MonthlyExpensesController extends Controller
      */
     public function store(Request $request)
     {
-        $requisition = $this->monthlyExpensesService->storeExpense($request);
+        $requisition = $this->booksService->storeBook($request);
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -52,7 +54,7 @@ class MonthlyExpensesController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Monthly expense created.",
+            'message' => "Livro added.",
         ], 200);
     }
 
@@ -68,7 +70,7 @@ class MonthlyExpensesController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $requisition = $this->monthlyExpensesService->updateExpense($request, $id);
+        $requisition = $this->booksService->updateBook($request, $id);
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -78,7 +80,7 @@ class MonthlyExpensesController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Monthly expense info updated.",
+            'message' => "Book info updated.",
         ], 200);
     }
 
@@ -87,7 +89,7 @@ class MonthlyExpensesController extends Controller
      */
     public function destroy(int $id)
     {
-        $requisition = $this->monthlyExpensesService->deleteExpense($id);
+        $requisition = $this->booksService->deleteBook($id);
 
         if (!$requisition) {
             throw new HttpResponseException(response()->json([
@@ -97,7 +99,7 @@ class MonthlyExpensesController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Expense deleted.",
+            'message' => "Book deleted.",
         ], 200);
     }
 }

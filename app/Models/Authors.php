@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MonthlyExpenses extends Model
+class Authors extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
     public $timestamps = false; // não tenta salvar created_at / updated_at
@@ -19,12 +17,10 @@ class MonthlyExpenses extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'id_user',
-        'expense_name',
-        'expense_value',
-        'parceled',
-        'parcels',
-        'current_parcel'
+        'name',
+        'pseudonym',
+        'birth',
+        'death',
     ];
 
     /**

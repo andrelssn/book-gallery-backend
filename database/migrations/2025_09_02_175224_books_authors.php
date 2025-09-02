@@ -6,30 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('repartitions', function (Blueprint $table) {
+        Schema::create('books_authors', function (Blueprint $table) {
+            $table->id();
             $table
-                ->id();
-            $table
-                ->unsignedBigInteger('id_user')
+                ->unsignedBigInteger('book_id')
                 ->nullable(false);
             $table
-                ->string('repartition_name')
-                ->nullable(false);
-            $table
-                ->decimal('repartition_value', 10, 2)
+                ->unsignedBigInteger('author_id')
                 ->nullable(false);
 
-            // FK
             $table
-                ->foreign('id_user')
+                ->foreign('book_id')
                 ->references('id')
-                ->on('users')
-                ->nullable(false);
+                ->on('books');
+            $table
+                ->foreign('author_id')
+                ->references('id')
+                ->on('authors');
         });
     }
 
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('repartitions');
+        Schema::dropIfExists('books_authors');
     }
 };

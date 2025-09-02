@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Repartitions extends Model
+class Books extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
     public $timestamps = false; // não tenta salvar created_at / updated_at
@@ -19,9 +17,10 @@ class Repartitions extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'id_user',
-        'repartition_name',
-        'repartition_value',
+        'title',
+        'subtitle',
+        'year',
+        'edition'
     ];
 
     /**

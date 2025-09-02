@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Objectives extends Model
+class Books_authors extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
     public $timestamps = false; // não tenta salvar created_at / updated_at
@@ -19,11 +17,8 @@ class Objectives extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'id_user',
-        'objective_name',
-        'objective_value',
-        'current_value',
-        'completed',
+        'book_id',
+        'author_id',
     ];
 
     /**

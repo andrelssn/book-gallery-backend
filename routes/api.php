@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\MonthlyExpensesController;
-use App\Http\Controllers\ObjectivesController;
-use App\Http\Controllers\PanelController;
-use App\Http\Controllers\RepartitionsController;
+use App\Http\Controllers\AuthorsController;
+use App\Http\Controllers\BooksController;
 use App\Http\Controllers\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,29 +22,19 @@ Route::prefix('user')->middleware('auth:sanctum')->group(function() {
     Route::put('/name/{id}', [UserInfoController::class, 'updateName']);
 });
 
-Route::prefix('monthly')->middleware('auth:sanctum')->group(function() {
-    Route::get('{id}', [MonthlyExpensesController::class, 'index']);
-    Route::post('{id}', [MonthlyExpensesController::class, 'store']);
-    Route::put('{id}', [MonthlyExpensesController::class, 'update']);
-    Route::delete('{id}', [MonthlyExpensesController::class, 'destroy']);
+Route::prefix('books')->group(function() {
+    Route::get('', [BooksController::class, 'index']);
+    Route::post('', [BooksController::class, 'store']);
+    Route::put('{id}', [BooksController::class, 'update']);
+    Route::delete('{id}', [BooksController::class, 'destroy']);
 });
 
-Route::prefix('repartitions')->middleware('auth:sanctum')->group(function() {
-    Route::get('{id}', [RepartitionsController::class, 'index']);
-    Route::post('{id}', [RepartitionsController::class, 'store']);
-    Route::put('{id}', [RepartitionsController::class, 'update']);
-    Route::delete('{id}', [RepartitionsController::class, 'destroy']);
-});
-
-Route::prefix('objectives')->middleware('auth:sanctum')->group(function() {
-    Route::get('{id}', [ObjectivesController::class, 'index']);
-    Route::post('{id}', [ObjectivesController::class, 'store']);
-    Route::put('{id}', [ObjectivesController::class, 'update']);
-    Route::delete('{id}', [ObjectivesController::class, 'destroy']);
-});
-
-Route::prefix('panel')->middleware('auth:sanctum')->group(function() {
-    Route::get('{id}', [PanelController::class, 'index']);
+Route::prefix('authors')->group(function() {
+    Route::get('', [AuthorsController::class, 'index']);
+    Route::get('/books/{id}', [AuthorsController::class, 'books']);
+    Route::post('', [AuthorsController::class, 'store']);
+    Route::put('{id}', [AuthorsController::class, 'update']);
+    Route::delete('{id}', [AuthorsController::class, 'destroy']);
 });
 
 Route::get('/web', function () {
