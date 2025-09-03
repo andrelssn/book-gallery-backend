@@ -80,7 +80,7 @@ class BooksController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => "Book info updated.",
+            'message' => $requisition,
         ], 200);
     }
 

@@ -45,29 +45,34 @@ class BooksService
     {
         $data = $this->booksRepository->getWhere($id);
 
-        if (!isset($data)) {
+        if (!$data) {
             throw new HttpResponseException(response()->json([
                 'error' => 'Book not found'
             ], 422));
-        };
+        }
 
-        $update = Books::where('id', $id)->update([
+        $bookId = $data->id;
+
+        $authorUpdated = false;
+        $bookUpdated   = false;
+
+        if ($request->author !== null) {
+            $authorUpdated = Books_authors::updateOrCreate(
+                ['book_id' => $bookId],
+                ['author_id' => $request->author]
+            ) ? true : false;
+        }
+
+        $bookUpdated = Books::where('id', $bookId)->update([
             'title'    => $request->title,
             'subtitle' => $request->subtitle,
             'year'     => $request->year,
             'edition'  => $request->edition,
-        ]);
+        ]) > 0;
 
-        $bookId = $data->id;
-
-        if ($request->author !== null) {
-            Books_authors::where('book_id', $bookId)->update([
-                'book_id' => $bookId,
-                'author_id' => $request->author
-            ]);
+        if ($authorUpdated || $bookUpdated) {
+            return true;
         }
-
-        return $update;
     }
 
     public function deleteBook(int $id): bool

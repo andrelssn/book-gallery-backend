@@ -6,6 +6,7 @@ use App\Models\Authors;
 use App\Models\Books_authors;
 use App\Repositories\Authors\AuthorsRepository;
 use App\Repositories\UserInfo\UserInfoRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
@@ -29,11 +30,14 @@ class AuthorsService
 
     public function storeAuthor(Request $request)
     {
+        $birth = $request->birth ? Carbon::createFromFormat('d/m/Y', $request->birth)->format('Y-m-d') : null;
+        $death = $request->death ? Carbon::createFromFormat('d/m/Y', $request->death)->format('Y-m-d') : null;
+
         $post = Authors::create([
             'name'      => $request->name,
             'pseudonym' => $request->pseudonym,
-            'birth'     => $request->birth,
-            'death'     => $request->death,
+            'birth'     => $birth,
+            'death'     => $death,
         ]);
 
         return $post;
@@ -49,11 +53,14 @@ class AuthorsService
             ], 422));
         };
 
+        $birth = $request->birth ? Carbon::createFromFormat('d/m/Y', $request->birth)->format('Y-m-d') : null;
+        $death = $request->death ? Carbon::createFromFormat('d/m/Y', $request->death)->format('Y-m-d') : null;
+
         $update = Authors::where('id', $id)->update([
             'name'      => $request->name,
             'pseudonym' => $request->pseudonym,
-            'birth'     => $request->birth,
-            'death'     => $request->death,
+            'birth'     => $birth,
+            'death'     => $death,
         ]);
 
         return $update;
